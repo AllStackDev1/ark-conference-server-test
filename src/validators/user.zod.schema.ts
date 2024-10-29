@@ -1,6 +1,6 @@
-import z from 'zod';
+import z from "zod";
 
-import { isEmpty } from 'utils/helper';
+import { isEmpty } from "utils/helper";
 
 export const SignupSchema = z.object({
   lastName: z.string().min(1),
@@ -11,7 +11,7 @@ export const SignupSchema = z.object({
     .min(6)
     .regex(
       new RegExp(
-        '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$',
+        "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
       ),
     ),
 });
@@ -25,7 +25,7 @@ export const LoginSchema = z.object({
     .min(6)
     .regex(
       new RegExp(
-        '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$',
+        "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
       ),
     ),
 });
@@ -51,7 +51,7 @@ export const ResetPasswordSchema = z.object({
     .min(6)
     .regex(
       new RegExp(
-        '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$',
+        "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
       ),
     ),
 });
@@ -74,8 +74,8 @@ export const UserUpdateSchema = z
   })
   .partial()
   .refine((data) => !isEmpty(data), {
-    message: 'One of the fields must be defined',
-    path: ['firstName', 'lastName', 'dateOfBirth'],
+    message: "One of the fields must be defined",
+    path: ["firstName", "lastName", "dateOfBirth"],
   });
 
 export type UserUpdateSchema = z.infer<typeof UserUpdateSchema>;

@@ -1,8 +1,8 @@
-import express, { Express } from 'express';
-import { ContainerModule, interfaces } from 'inversify';
-import { Server, createServer } from 'node:http';
+import express, { Express } from "express";
+import { ContainerModule, interfaces } from "inversify";
+import { Server, createServer } from "node:http";
 
-import { TYPES } from 'di/types';
+import { TYPES } from "di/types";
 
 // Create Express app
 const expressApp = express();

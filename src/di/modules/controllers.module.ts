@@ -1,6 +1,6 @@
-import { ContainerModule, interfaces } from 'inversify';
-import { AuthController, UserController } from 'controllers';
-import { TYPES } from 'di/types';
+import { ContainerModule, interfaces } from "inversify";
+import { AuthController, UserController } from "controllers";
+import { TYPES } from "di/types";
 
 const initializeModule = (bind: interfaces.Bind) => {
   bind<AuthController>(TYPES.AuthController)

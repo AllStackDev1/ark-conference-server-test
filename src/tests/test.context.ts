@@ -1,6 +1,6 @@
-import 'reflect-metadata';
-import { interfaces } from 'inversify';
-import { container } from 'di/container';
+import "reflect-metadata";
+import { interfaces } from "inversify";
+import { container } from "di/container";
 
 export class TestContext {
   public mock<T>(

@@ -1,4 +1,4 @@
-import { interfaces, Container as InversifyContainer } from 'inversify';
+import { interfaces, Container as InversifyContainer } from "inversify";
 import {
   ServerModule,
   ModelsModule,
@@ -6,8 +6,8 @@ import {
   MiddlewareModule,
   ControllersModule,
   RepositoriesModule,
-} from './modules';
-import { App } from 'app';
+} from "./modules";
+import { App } from "app";
 
 class ContainerManager {
   private static instance: ContainerManager;
@@ -16,7 +16,7 @@ class ContainerManager {
 
   private constructor() {
     this._container = new InversifyContainer({
-      defaultScope: 'Singleton',
+      defaultScope: "Singleton",
     });
   }
 

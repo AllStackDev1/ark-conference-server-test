@@ -1,7 +1,7 @@
-import Redis, { RedisOptions } from 'ioredis';
+import Redis, { RedisOptions } from "ioredis";
 
-import { injectable } from 'inversify';
-import { redisConfig } from 'configs/env.config';
+import { injectable } from "inversify";
+import { redisConfig } from "configs/env.config";
 
 @injectable()
 export class RedisService {
@@ -34,17 +34,17 @@ export class RedisService {
       ...opts,
     });
 
-    redisClient.on('error', (err) => {
+    redisClient.on("error", (err) => {
       console.log(err);
-      logger.error({ err }, 'Redis client connection error');
+      logger.error({ err }, "Redis client connection error");
     });
 
-    redisClient.on('ready', () => {
-      logger.info('Redis client is ready');
+    redisClient.on("ready", () => {
+      logger.info("Redis client is ready");
     });
 
-    redisClient.on('reconnecting', () => {
-      logger.info('Redis client is reconnecting');
+    redisClient.on("reconnecting", () => {
+      logger.info("Redis client is reconnecting");
     });
 
     return redisClient;

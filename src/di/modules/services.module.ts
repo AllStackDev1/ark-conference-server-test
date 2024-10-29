@@ -1,6 +1,6 @@
-import { ContainerModule, interfaces } from 'inversify';
+import { ContainerModule, interfaces } from "inversify";
 
-import { TYPES } from 'di/types';
+import { TYPES } from "di/types";
 import {
   AuthService,
   IAuthService,
@@ -8,7 +8,7 @@ import {
   IUserService,
   RedisService,
   SocketService,
-} from 'services';
+} from "services";
 
 const initializeModule = (bind: interfaces.Bind) => {
   bind(TYPES.RedisService).to(RedisService).inSingletonScope();

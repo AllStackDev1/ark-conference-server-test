@@ -16,7 +16,7 @@
     "test": "NODE_ENV=test TEST_MODEL=mock jest src --runInBand --detectOpenHandles",
     "test:watch": "NODE_ENV=test TEST_MODEL=real jest --runInBand --watch",
     "test-single": "NODE_ENV=test TEST_MODEL=mock jest ./src/tests/app.test.ts --detectOpenHandles",
-    "lint": "eslint ./src/**/*"
+    "lint": "eslint ./src --fix"
   },
   "author": "Chinedu",
   "license": "ISC",

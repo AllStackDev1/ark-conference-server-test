@@ -1,20 +1,20 @@
-import { inject, injectable } from 'inversify';
-import { UNAUTHORIZED } from 'http-status';
-import { Request, Response, NextFunction } from 'express';
+import { inject, injectable } from "inversify";
+import { UNAUTHORIZED } from "http-status";
+import { Request, Response, NextFunction } from "express";
 
-import { UserModel } from 'db/models';
-import { AppError, catchAsync } from 'utils';
-import { TYPES } from 'di/types';
-import { IAuthService, RedisService } from 'services';
+import { UserModel } from "db/models";
+import { AppError, catchAsync } from "utils";
+import { TYPES } from "di/types";
+import { IAuthService, RedisService } from "services";
 
-declare module 'express-session' {
+declare module "express-session" {
   interface SessionData {
     user: Partial<UserModel>;
     authorized: boolean;
   }
 }
 
-declare module 'express' {
+declare module "express" {
   interface Request {
     user?: Partial<UserModel>;
   }
@@ -32,10 +32,10 @@ export class AuthHandler {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private async authenticateToken(req: Request, _: Response) {
-    if (req.headers.authorization?.startsWith('Bearer')) {
-      const accessToken = req.headers.authorization.split(' ')[1];
+    if (req.headers.authorization?.startsWith("Bearer")) {
+      const accessToken = req.headers.authorization.split(" ")[1];
       if (!accessToken) {
-        throw new AppError('Please login to gain access', UNAUTHORIZED);
+        throw new AppError("Please login to gain access", UNAUTHORIZED);
       }
       // verify access token
       const { decoded, error } =
@@ -48,10 +48,10 @@ export class AuthHandler {
 
         if (!storedUser) {
           throw new AppError(
-            'Access token expired. Please request a new one using your refresh token.',
+            "Access token expired. Please request a new one using your refresh token.",
             UNAUTHORIZED,
             null,
-            'TOKEN_EXPIRED',
+            "TOKEN_EXPIRED",
           );
         }
 
@@ -73,15 +73,15 @@ export class AuthHandler {
       if (!error) {
         // Instead of creating a new access token here, instruct the client to request one
         throw new AppError(
-          'Access token expired. Please request a new one using your refresh token.',
+          "Access token expired. Please request a new one using your refresh token.",
           UNAUTHORIZED,
           null,
-          'TOKEN_EXPIRED',
+          "TOKEN_EXPIRED",
         );
       }
     }
 
-    throw new AppError('Please login to gain access', UNAUTHORIZED);
+    throw new AppError("Please login to gain access", UNAUTHORIZED);
   }
 
   public async handler() {
