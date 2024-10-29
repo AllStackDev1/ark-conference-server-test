@@ -1,4 +1,4 @@
-import { injectable } from "inversify";
+import { injectable } from 'inversify';
 import {
   Model,
   Attributes,
@@ -6,8 +6,8 @@ import {
   WhereOptions,
   WhereAttributeHashValue,
   FindOptions,
-} from "sequelize";
-import { MakeNullishOptional } from "sequelize/lib/utils";
+} from 'sequelize';
+import { MakeNullishOptional } from 'sequelize/lib/utils';
 
 export type ModelType<T extends Model<T>> = ModelStatic<T>;
 
@@ -15,7 +15,7 @@ export type ModelType<T extends Model<T>> = ModelStatic<T>;
 export class BaseRepository<K, T extends Model> {
   constructor(protected model: ModelType<T>) {}
 
-  public async create(payload: MakeNullishOptional<T["_creationAttributes"]>) {
+  public async create(payload: MakeNullishOptional<T['_creationAttributes']>) {
     return await this.model.create(payload);
   }
 
@@ -25,14 +25,14 @@ export class BaseRepository<K, T extends Model> {
 
   public async getById(
     id: string,
-    options?: Omit<FindOptions<Attributes<T>>, "where">,
+    options?: Omit<FindOptions<Attributes<T>>, 'where'>,
   ) {
     return await this.model.findByPk(id, options);
   }
 
   public async getOne(
     query: WhereOptions<Attributes<T>>,
-    options?: Omit<FindOptions<Attributes<T>>, "where">,
+    options?: Omit<FindOptions<Attributes<T>>, 'where'>,
   ) {
     return await this.model.findOne({ where: query, ...options });
   }

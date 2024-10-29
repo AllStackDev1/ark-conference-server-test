@@ -1,26 +1,26 @@
-import { Redis } from "ioredis";
-import session from "express-session";
-import RedisStore from "connect-redis";
-import { inject, injectable } from "inversify";
-import { NextFunction, Request, Response } from "express";
+import { Redis } from 'ioredis';
+import session from 'express-session';
+import RedisStore from 'connect-redis';
+import { inject, injectable } from 'inversify';
+import { NextFunction, Request, Response } from 'express';
 
-import { TYPES } from "di/types";
-import { RedisService } from "services";
-import { isProd, SESSION_SECRET } from "configs/env.config";
+import { TYPES } from 'di/types';
+import { RedisService } from 'services';
+import { isProd, SESSION_SECRET } from 'configs/env.config';
 
 export const sessionHandler = (client: Redis) => {
   // Initialize store.
   const redisStore = new RedisStore({
     client,
-    prefix: "myapp:super-parakeet",
+    prefix: 'myapp:super-parakeet',
   });
 
   return session({
     cookie: {
-      secure: isProd || "auto",
+      secure: isProd || 'auto',
       httpOnly: true,
       maxAge: 1000 * 60,
-      sameSite: isProd ? "none" : "lax",
+      sameSite: isProd ? 'none' : 'lax',
     },
     store: redisStore,
     resave: false, // required: force lightweight session keep alive (touch)
@@ -34,7 +34,7 @@ export class SessionHandler extends RedisStore {
   constructor(@inject(TYPES.RedisService) private redisService: RedisService) {
     super({
       client: redisService.getClient(),
-      prefix: "myapp:super-parakeet",
+      prefix: 'myapp:super-parakeet',
     });
 
     this.handler = this.handler.bind(this);
@@ -43,10 +43,10 @@ export class SessionHandler extends RedisStore {
   async handler(req: Request, res: Response, next: NextFunction) {
     return session({
       cookie: {
-        secure: isProd || "auto",
+        secure: isProd || 'auto',
         httpOnly: true,
         maxAge: 1000 * 60,
-        sameSite: isProd ? "none" : "lax",
+        sameSite: isProd ? 'none' : 'lax',
       },
       store: this,
       resave: false, // required: force lightweight session keep alive (touch)

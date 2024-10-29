@@ -1,5 +1,5 @@
-export function Controller(baseRoute: string = ""): ClassDecorator {
+export function Controller(baseRoute: string = ''): ClassDecorator {
   return (target) => {
-    Reflect.defineMetadata("baseRoute", baseRoute, target);
+    Reflect.defineMetadata('baseRoute', baseRoute, target);
   };
 }

@@ -1,19 +1,19 @@
-import "reflect-metadata";
+import 'reflect-metadata';
 
-import request from "supertest";
-import { Express } from "express";
-import EventEmitter from "node:events";
-import { NOT_FOUND, OK } from "http-status";
+import request from 'supertest';
+import { Express } from 'express';
+import EventEmitter from 'node:events';
+import { NOT_FOUND, OK } from 'http-status';
 
-import { container } from "di/container";
+import { container } from 'di/container';
 
-import { App } from "app";
-import { TYPES } from "di/types";
+import { App } from 'app';
+import { TYPES } from 'di/types';
 
 // Fix EventEmitter inheritance issue for tests
 Object.getPrototypeOf(EventEmitter.prototype).constructor = Object;
 
-describe("Testing App", () => {
+describe('Testing App', () => {
   let app: App;
   let express: Express;
 
@@ -27,15 +27,15 @@ describe("Testing App", () => {
     await app?.shutdown(() => {});
   });
 
-  it("Starts and has the proper test environment", async () => {
-    expect(process.env.NODE_ENV).toBe("test");
+  it('Starts and has the proper test environment', async () => {
+    expect(process.env.NODE_ENV).toBe('test');
     expect(express).toBeDefined();
   });
 
-  it("responds with a not found message", async () => {
+  it('responds with a not found message', async () => {
     const response = await request(express)
-      .get("/not-found")
-      .set("Accept", "application/json")
+      .get('/not-found')
+      .set('Accept', 'application/json')
       .expect(NOT_FOUND);
 
     expect(response.body.message).toEqual(
@@ -43,12 +43,12 @@ describe("Testing App", () => {
     );
   });
 
-  it("responds with a health status", async () => {
+  it('responds with a health status', async () => {
     const response = await request(express)
-      .get("/health-check")
-      .set("Accept", "application/json")
+      .get('/health-check')
+      .set('Accept', 'application/json')
       .expect(OK);
 
-    expect(response.body).toEqual({ status: "success", health: "100%" });
+    expect(response.body).toEqual({ status: 'success', health: '100%' });
   });
 });

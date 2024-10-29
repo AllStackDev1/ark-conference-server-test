@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AppError } from "utils";
-import httpStatus from "http-status";
-import { Request, Response, NextFunction } from "express";
-import { ZodEffects, ZodError, ZodIssue, ZodObject } from "zod";
+import { AppError } from 'utils';
+import httpStatus from 'http-status';
+import { Request, Response, NextFunction } from 'express';
+import { ZodEffects, ZodError, ZodIssue, ZodObject } from 'zod';
 
 type ZodSchema = ZodObject<any> | ZodEffects<ZodObject<any>>;
 
@@ -30,19 +30,19 @@ const errorMessageBuilder = (
 ): string | Record<string, string | number | (string | number)[]> => {
   const message = issue.message.toLowerCase();
 
-  if (message.includes("one of")) {
+  if (message.includes('one of')) {
     return { message: issue.message, path: issue.path };
   }
 
-  if (message.includes("invalid")) {
+  if (message.includes('invalid')) {
     return `${issue.path} contains ${message}`;
   }
 
-  if (message.includes("required")) {
+  if (message.includes('required')) {
     return `${issue.path} is ${message}`;
   }
 
-  return "";
+  return '';
 };
 
 export function Validator({ body, query, params }: SchemaPayload) {
@@ -69,13 +69,13 @@ export function Validator({ body, query, params }: SchemaPayload) {
         if (error instanceof ZodError) {
           const errorMessages = error.errors.map(errorMessageBuilder);
           throw new AppError(
-            "Invalid payload",
+            'Invalid payload',
             httpStatus.BAD_REQUEST,
             errorMessages,
           );
         } else {
           throw new AppError(
-            "Internal Server Error",
+            'Internal Server Error',
             httpStatus.INTERNAL_SERVER_ERROR,
           );
         }

@@ -1,10 +1,10 @@
-import { inject, injectable, decorate } from "inversify";
-import { RateLimiterRedis } from "rate-limiter-flexible";
-import { Request, Response, NextFunction } from "express";
-import { INTERNAL_SERVER_ERROR, TOO_MANY_REQUESTS } from "http-status";
+import { inject, injectable, decorate } from 'inversify';
+import { RateLimiterRedis } from 'rate-limiter-flexible';
+import { Request, Response, NextFunction } from 'express';
+import { INTERNAL_SERVER_ERROR, TOO_MANY_REQUESTS } from 'http-status';
 
-import { TYPES } from "di/types";
-import { RedisService } from "services";
+import { TYPES } from 'di/types';
+import { RedisService } from 'services';
 
 decorate(injectable(), RateLimiterRedis);
 
@@ -18,7 +18,7 @@ export class RateLimitHandler extends RateLimiterRedis {
       storeClient: redisService.getClient({
         enableOfflineQueue: false,
       }),
-      keyPrefix: "rate-limit",
+      keyPrefix: 'rate-limit',
       points: 5,
       duration: 1,
     });
@@ -36,13 +36,13 @@ export class RateLimitHandler extends RateLimiterRedis {
         logger.error(rejRes.message, rejRes);
         res
           .status(INTERNAL_SERVER_ERROR)
-          .json({ success: false, message: "Server error, try again." });
+          .json({ success: false, message: 'Server error, try again.' });
       } else {
         const secs = Math.round(rejRes.msBeforeNext / 1000) || 1;
-        res.set("Retry-After", String(secs));
+        res.set('Retry-After', String(secs));
         res
           .status(TOO_MANY_REQUESTS)
-          .send({ status: "error", message: "Too Many Requests" });
+          .send({ status: 'error', message: 'Too Many Requests' });
       }
     }
   }

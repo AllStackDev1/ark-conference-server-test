@@ -1,6 +1,10 @@
-import { ContainerModule, interfaces } from "inversify";
-import { AuthController, UserController } from "controllers";
-import { TYPES } from "di/types";
+import { ContainerModule, interfaces } from 'inversify';
+import {
+  AuthController,
+  UserController,
+  ConferenceController,
+} from 'controllers';
+import { TYPES } from 'di/types';
 
 const initializeModule = (bind: interfaces.Bind) => {
   bind<AuthController>(TYPES.AuthController)
@@ -8,6 +12,9 @@ const initializeModule = (bind: interfaces.Bind) => {
     .inSingletonScope();
   bind<UserController>(TYPES.UserController)
     .to(UserController)
+    .inSingletonScope();
+  bind<ConferenceController>(TYPES.ConferenceController)
+    .to(ConferenceController)
     .inSingletonScope();
 };
 

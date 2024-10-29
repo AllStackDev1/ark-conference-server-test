@@ -9,7 +9,7 @@ type InstanceObj = {
 export const mockModel = (instanceObj?: InstanceObj) => {
   return {
     create: jest.fn((payload: any) => {
-      const newData = { id: "1", ...payload };
+      const newData = { id: '1', ...payload };
       for (const key in newData) {
         indexedTable.set(newData[key], newData);
       }

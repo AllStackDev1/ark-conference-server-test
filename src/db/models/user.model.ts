@@ -4,13 +4,13 @@ import {
   DataTypes,
   InferAttributes,
   CreationOptional,
-} from "sequelize";
-import bcrypt from "bcrypt";
-import { sign } from "jsonwebtoken";
-import { decorate, injectable } from "inversify";
+} from 'sequelize';
+import bcrypt from 'bcrypt';
+import { sign } from 'jsonwebtoken';
+import { decorate, injectable } from 'inversify';
 
-import sequelize from "configs/sequelize.config";
-import { HASHING_SALT, jwtConfig } from "configs/env.config";
+import sequelize from 'configs/sequelize.config';
+import { HASHING_SALT, jwtConfig } from 'configs/env.config';
 
 decorate(injectable(), Model);
 
@@ -27,7 +27,7 @@ export class UserModel extends Model<UserModelDto> {
   declare dateOfBirth?: CreationOptional<Date>;
 
   getFullname() {
-    return this?.firstName + " " + this?.lastName;
+    return this?.firstName + ' ' + this?.lastName;
   }
 
   getAge() {
@@ -43,7 +43,7 @@ export class UserModel extends Model<UserModelDto> {
     return await bcrypt.compare(password, this.password);
   }
 
-  generateJWT(type: "access" | "refresh" | "reset" | "verify") {
+  generateJWT(type: 'access' | 'refresh' | 'reset' | 'verify') {
     const { secretKey, accessExpiresIn, refreshExpiresIn, defaultExpiresIn } =
       jwtConfig;
     return sign(
@@ -51,9 +51,9 @@ export class UserModel extends Model<UserModelDto> {
       secretKey,
       {
         expiresIn:
-          type === "access"
+          type === 'access'
             ? accessExpiresIn
-            : type === "refresh"
+            : type === 'refresh'
               ? refreshExpiresIn
               : defaultExpiresIn,
       },
@@ -88,7 +88,7 @@ UserModel.init(
       set(value: string) {
         const salt = bcrypt.genSaltSync(+HASHING_SALT);
         const hash = bcrypt.hashSync(value, salt + this.email);
-        this.setDataValue("password", hash);
+        this.setDataValue('password', hash);
       },
     },
     dateOfBirth: {
@@ -110,9 +110,9 @@ UserModel.init(
     sequelize,
     paranoid: true,
     freezeTableName: true,
-    modelName: "Users",
+    modelName: 'Users',
     defaultScope: {
-      attributes: { exclude: ["password"] },
+      attributes: { exclude: ['password'] },
     },
   },
 );

@@ -13,7 +13,7 @@ export class AppError extends Error {
     this.code = code;
     this.errors = errors;
     this.statusCode = statusCode;
-    this.status = ("" + statusCode).startsWith("4") ? "failed" : "error";
+    this.status = ('' + statusCode).startsWith('4') ? 'failed' : 'error';
     this.IsOperational = true;
 
     Error.captureStackTrace(this, this.constructor);

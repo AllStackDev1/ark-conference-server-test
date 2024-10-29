@@ -1,21 +1,25 @@
-import { Express, RequestHandler } from "express";
+import { Express, RequestHandler } from 'express';
 
-import { catchAsync } from "utils";
-import { AuthController, UserController } from "controllers";
+import { catchAsync } from 'utils';
+import {
+  AuthController,
+  UserController,
+  ConferenceController,
+} from 'controllers';
 
-type IController = AuthController | UserController;
+type IController = AuthController | UserController | ConferenceController;
 
 type RouteHandler = Map<keyof Express, Map<string, RequestHandler[]>>;
 
 export function defineRoutes(controllers: IController[], app: Express) {
   for (const controller of controllers) {
     const routeHandlers: RouteHandler = Reflect.getMetadata(
-      "routeHandlers",
+      'routeHandlers',
       controller,
     );
 
     const controllerPath: string = Reflect.getMetadata(
-      "baseRoute",
+      'baseRoute',
       controller.constructor,
     );
     const methods = Array.from(routeHandlers.keys());
@@ -37,7 +41,7 @@ export function defineRoutes(controllers: IController[], app: Express) {
           if (handlers) {
             app[method](controllerPath + routeNames[k], handlers);
             logger.log(
-              "Loading route: ",
+              'Loading route: ',
               method,
               controllerPath + routeNames[k],
             );

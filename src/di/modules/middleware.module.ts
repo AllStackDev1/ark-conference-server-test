@@ -1,7 +1,7 @@
-import { ContainerModule, interfaces } from "inversify";
+import { ContainerModule, interfaces } from 'inversify';
 
-import { TYPES } from "di/types";
-import { RateLimitHandler, SessionHandler, AuthHandler } from "middlewares";
+import { TYPES } from 'di/types';
+import { RateLimitHandler, SessionHandler, AuthHandler } from 'middlewares';
 
 const initializeModule = (bind: interfaces.Bind) => {
   bind(TYPES.AuthHandler).to(AuthHandler).inSingletonScope();

@@ -1,5 +1,5 @@
-import EventEmitter from "node:events";
-import { decorate, injectable } from "inversify";
+import EventEmitter from 'node:events';
+import { decorate, injectable } from 'inversify';
 
 decorate(injectable(), EventEmitter);
 @injectable()

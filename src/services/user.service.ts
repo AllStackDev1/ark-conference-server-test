@@ -1,16 +1,16 @@
-import qs from "node:querystring";
-import { injectable, inject } from "inversify";
-import { BAD_REQUEST, NOT_FOUND } from "http-status";
-import { useAdapter } from "@type-cacheable/ioredis-adapter";
-import { Cacheable, CacheClear, CacheUpdate } from "@type-cacheable/core";
+import qs from 'node:querystring';
+import { injectable, inject } from 'inversify';
+import { BAD_REQUEST, NOT_FOUND } from 'http-status';
+import { useAdapter } from '@type-cacheable/ioredis-adapter';
+import { Cacheable, CacheClear, CacheUpdate } from '@type-cacheable/core';
 
-import { TYPES } from "di/types";
-import { AppError, exclude } from "utils";
-import { BaseService } from "./base.service";
-import { UserRepository } from "repositories";
-import { RedisService } from "./redis.service";
-import { UserModel, UserModelDto } from "db/models";
-import type { UserUpdateSchema, UserQuerySchema } from "validators";
+import { TYPES } from 'di/types';
+import { AppError, exclude } from 'utils';
+import { BaseService } from './base.service';
+import { UserRepository } from 'repositories';
+import { RedisService } from './redis.service';
+import { UserModel, UserModelDto } from 'db/models';
+import type { UserUpdateSchema, UserQuerySchema } from 'validators';
 
 export interface IUserService {
   getAllUsers(): Promise<{ data: UserModelDto[]; message: string }>;
@@ -44,21 +44,21 @@ export class UserService extends BaseService implements IUserService {
   private dto(user: UserModel) {
     const keys = [
       ...new Set<keyof UserModelDto>([
-        !user.dateOfBirth ? "dateOfBirth" : "password",
-        !user.deletedAt ? "deletedAt" : "password",
-        "password",
+        !user.dateOfBirth ? 'dateOfBirth' : 'password',
+        !user.deletedAt ? 'deletedAt' : 'password',
+        'password',
       ]),
     ];
     return exclude(user.toJSON(), keys);
   }
 
-  @Cacheable({ cacheKey: "users" })
+  @Cacheable({ cacheKey: 'users' })
   public async getAllUsers() {
     const users = await this.repo.getAll();
     // run some formating and all need data manipulation
     return {
       data: users.map(this.dto),
-      message: `${users.length} user${users.length > 1 ? "s" : ""} found.`,
+      message: `${users.length} user${users.length > 1 ? 's' : ''} found.`,
     };
   }
 
@@ -70,7 +70,7 @@ export class UserService extends BaseService implements IUserService {
     // run some formating and all need data manipulation
     return {
       data: users.map(this.dto),
-      message: `${users.length} user${users.length > 1 ? "s" : ""} found.`,
+      message: `${users.length} user${users.length > 1 ? 's' : ''} found.`,
     };
   }
 
@@ -79,12 +79,12 @@ export class UserService extends BaseService implements IUserService {
     // run some formating and all need data manipulation
     const user = await this.repo.getById(id);
     if (user) return this.dto(user);
-    throw new AppError("No user found", NOT_FOUND);
+    throw new AppError('No user found', NOT_FOUND);
   }
 
   @CacheUpdate({
     cacheKey: (args, ctx, result) => result.id,
-    cacheKeysToClear: () => ["users"],
+    cacheKeysToClear: () => ['users'],
   })
   public async update(id: string, payload: UserUpdateSchema) {
     const [updatedRows] = await this.repo.updateById(id, payload);
@@ -93,16 +93,16 @@ export class UserService extends BaseService implements IUserService {
       const user = await this.repo.getById(id);
       if (user) return this.dto(user);
     }
-    throw new AppError("Unable to update, please try again.", BAD_REQUEST);
+    throw new AppError('Unable to update, please try again.', BAD_REQUEST);
   }
 
-  @CacheClear({ cacheKey: ([id]) => [id, "users"] })
+  @CacheClear({ cacheKey: ([id]) => [id, 'users'] })
   public async softDeleteById(id: string) {
     // run some events, add to queue for possible full on deletions after 30days
     return this.repo.deleteById(id);
   }
 
-  @CacheClear({ cacheKey: ([id]) => [id, "users"] })
+  @CacheClear({ cacheKey: ([id]) => [id, 'users'] })
   public async forceDeleteById(id: string) {
     return this.repo.deleteById(id, true);
   }
