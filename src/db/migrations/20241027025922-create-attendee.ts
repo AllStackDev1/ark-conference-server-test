@@ -1,10 +1,10 @@
 /** @type {import('sequelize-cli').Migration} */
 
-import { DataTypes, QueryInterface } from 'sequelize';
+import { type DataTypes, QueryInterface } from 'sequelize';
 
 export default {
   async up(queryInterface: QueryInterface, Sequelize: typeof DataTypes) {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('Attendees', {
       id: {
         unique: true,
         allowNull: false,
@@ -12,25 +12,16 @@ export default {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
-      firstName: {
+      userId: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.UUID,
+        references: { model: 'Users', key: 'id' },
       },
-      lastName: {
+      conferenceId: {
         allowNull: false,
-        type: Sequelize.STRING,
-      },
-      email: {
-        allowNull: false,
-        type: Sequelize.STRING,
-        unique: true,
-      },
-      password: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      dateOfBirth: {
-        type: DataTypes.DATE,
+        onDelete: 'CASCADE',
+        type: Sequelize.UUID,
+        references: { model: 'Conferences', key: 'id' },
       },
       createdAt: {
         allowNull: false,
@@ -40,12 +31,9 @@ export default {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      deletedAt: {
-        type: DataTypes.DATE,
-      },
     });
   },
   async down(queryInterface: QueryInterface) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('Attendees');
   },
 };
