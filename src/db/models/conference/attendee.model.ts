@@ -9,8 +9,8 @@ import {
 import { decorate, injectable } from 'inversify';
 
 import sequelize from 'configs/sequelize.config';
-import { UserModel } from '../user.model';
-import { TalkModel } from './talk.model';
+import { UserModel, UserModelDto } from '../user.model';
+import { TalkModel, TalkModelDto } from './talk.model';
 
 class AttendeeModel extends Model<AttendeeModelDto> {
   declare userId: string;
@@ -18,11 +18,17 @@ class AttendeeModel extends Model<AttendeeModelDto> {
   declare id?: CreationOptional<string>;
   declare createdAt?: CreationOptional<string>;
   declare updatedAt?: CreationOptional<string>;
+  declare user?: CreationOptional<UserModelDto>;
+  declare talks?: CreationOptional<TalkModelDto[]>;
 
   declare static associations: {
     user: Association<AttendeeModel, UserModel>;
     talks: Association<AttendeeModel, TalkModel>;
   };
+
+  // async addTalk(talkId: string) {
+  //   return this;
+  // }
 }
 
 AttendeeModel.init(

@@ -19,8 +19,8 @@ import {
   ChatModelDto,
   AttendeeModel,
   ChatHistoryModel,
-  AttendeeModelDto,
   ConferenceModelDto,
+  ChatMemberModel,
 } from 'db/models';
 import type {
   CreateTalkSchema,
@@ -41,19 +41,15 @@ export interface IConferenceService {
   addAttendeeToConference(
     id: string,
     dto: CreateAttendeeSchema,
-  ): Promise<AttendeeModelDto>;
+  ): Promise<ConferenceModelDto>;
   addTalkToConference(
     id: string,
     dto: CreateTalkSchema,
   ): Promise<ConferenceModelDto | null>;
-  addAttendeeToConference(
-    id: string,
-    dto: CreateAttendeeSchema,
-  ): Promise<AttendeeModelDto>;
   addTalkToAttendee(
     attendee: string,
     talkId: string,
-  ): Promise<{ chat: ChatModelDto; conference: ConferenceModelDto }>;
+  ): Promise<{ chat: ChatModelDto; conference: ConferenceModelDto | null }>;
 }
 
 @injectable()
@@ -175,17 +171,24 @@ export class ConferenceService
     conferenceId: string,
     dto: CreateAttendeeSchema,
   ) {
-    return await this.attendeeRepo.create({ conferenceId, ...dto });
+    const attendee = await this.attendeeRepo.create({ conferenceId, ...dto });
+    return this.getConferenceById(attendee.conferenceId);
   }
 
   public async addTalkToAttendee(attendeeId: string, talkId: string) {
-    const attendee = await this.attendeeRepo.getById(attendeeId);
+    const attendee = await this.attendeeRepo.getById(attendeeId, {
+      include: ['talks'],
+    });
+
     if (attendee) {
-      // @ts-expect-error ts fooling
-      await attendee?.addTalk(talkId);
+      const isNewAttendee = !attendee?.talks?.find(({ id }) => id === talkId);
+      if (isNewAttendee) {
+        // @ts-expect-error ts fooling
+        await attendee?.addTalk(talkId);
+      }
 
       let chat = await this.chatRepo.getOne(
-        { talkId: talkId },
+        { talkId },
         {
           include: [
             {
@@ -193,31 +196,43 @@ export class ConferenceService
               as: 'histories',
               include: ['sender'],
             },
+            {
+              model: ChatMemberModel,
+              as: 'members',
+              include: ['user'],
+            },
           ],
         },
       );
 
       if (!chat) {
-        chat = await this.chatRepo.create({ talkId: talkId });
-      }
-
-      // Optional: Check if the user is already a member
-      const existingMember = await this.memberRepo.getOne({
-        chatId: chat.id,
-        userId: attendee.userId,
-      });
-
-      if (!existingMember) {
-        await this.memberRepo.create({
-          chatId: chat.id as string,
-          userId: attendee.userId,
-          joinedAt: new Date(),
-        });
+        chat = await this.chatRepo.create(
+          {
+            talkId,
+            // create this first member
+            members: [
+              {
+                userId: attendee.userId,
+                joinedAt: new Date(),
+              },
+            ],
+          },
+          {
+            include: [
+              {
+                model: ChatMemberModel,
+                as: 'members',
+              },
+            ],
+          },
+        );
       }
 
       return {
         chat,
-        conference: await this.getConferenceById(attendee.conferenceId),
+        conference: isNewAttendee
+          ? await this.getConferenceById(attendee.conferenceId)
+          : null,
       };
     }
 

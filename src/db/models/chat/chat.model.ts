@@ -9,8 +9,8 @@ import {
 import { decorate, injectable } from 'inversify';
 
 import sequelize from 'configs/sequelize.config';
-import { ChatMemberModel } from './member.model';
-import { ChatHistoryModel } from './history.model';
+import { ChatMemberModel, ChatMemberModelDto } from './member.model';
+import { ChatHistoryModel, ChatHistoryModelDto } from './history.model';
 import { TalkModel } from '../conference';
 
 class ChatModel extends Model<ChatModelDto> {
@@ -18,6 +18,8 @@ class ChatModel extends Model<ChatModelDto> {
   declare id?: CreationOptional<string>;
   declare createdAt?: CreationOptional<string>;
   declare updatedAt?: CreationOptional<string>;
+  declare members?: CreationOptional<ChatMemberModelDto[]>;
+  declare histories?: CreationOptional<ChatHistoryModelDto[]>;
 
   declare static associations: {
     members: Association<ChatModel, ChatMemberModel>;

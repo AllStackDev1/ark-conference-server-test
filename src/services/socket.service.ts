@@ -50,7 +50,6 @@ export class SocketService {
       // Join a chat room based on the id
       socket.on('joinRoom', async (chatId: string) => {
         socket.join(chatId);
-        // find and update
         // Broadcast to the room that a new user has joined
         socket.broadcast.to(chatId).emit('userJoined', {
           senderId: decoded?.sub,
@@ -64,8 +63,8 @@ export class SocketService {
         });
       });
 
-      // Leave a room
-      socket.on('leaveRoom', (chatId: string) => {
+      // left the chat
+      socket.on('leftChat', (chatId: string) => {
         socket.leave(chatId);
         socket.broadcast.to(chatId).emit('userLeft', {
           senderId: decoded?.sub,

@@ -72,13 +72,19 @@ ConferenceModel.hasMany(TalkModel, {
   foreignKey: 'conferenceId',
   as: 'talks',
 });
-TalkModel.belongsTo(ConferenceModel, { foreignKey: 'conferenceId' });
+TalkModel.belongsTo(ConferenceModel, {
+  foreignKey: 'conferenceId',
+  as: 'conference',
+});
 
 ConferenceModel.hasMany(AttendeeModel, {
   foreignKey: 'conferenceId',
   as: 'attendees',
 });
-AttendeeModel.belongsTo(ConferenceModel, { foreignKey: 'conferenceId' });
+AttendeeModel.belongsTo(ConferenceModel, {
+  foreignKey: 'conferenceId',
+  as: 'conference',
+});
 
 decorate(injectable(), ConferenceModel);
 
