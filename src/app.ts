@@ -107,7 +107,7 @@ export class App {
     logger.log('----------------------------------------');
     this.express.use(corsHandler);
     this.express.use(this.sessionHandler.handler);
-    // this.express.use(this.rateLimitHandler.handler);
+    this.express.use(this.rateLimitHandler.handler);
     this.express.use(loggerHandler);
   }
 

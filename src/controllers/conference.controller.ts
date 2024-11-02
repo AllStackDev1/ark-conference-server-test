@@ -75,7 +75,7 @@ export class ConferenceController {
       .json({ message: 'Talk successfully removed from conference' });
   }
 
-  // route to add an attendee to a conference
+  // route to register/add an attendee for/to a conference
   @Route('post', '/:id/attendee/register')
   @AuthGuard()
   @Validator({ params: ParamsWithId, body: CreateAttendeeSchema })
