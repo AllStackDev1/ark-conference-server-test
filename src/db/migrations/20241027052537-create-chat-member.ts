@@ -13,7 +13,7 @@ export default {
         defaultValue: Sequelize.UUIDV4,
       },
       userId: {
-        unique: true,
+        // unique: true,
         allowNull: false,
         type: Sequelize.UUID,
         references: { model: 'Users', key: 'id' },

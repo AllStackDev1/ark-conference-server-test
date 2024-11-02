@@ -13,9 +13,9 @@ import { UserModel } from '../user.model';
 
 class ChatMemberModel extends Model<ChatMemberModelDto> {
   declare userId: string;
-  declare chatId: string;
   declare joinedAt: Date;
   declare id?: CreationOptional<string>;
+  declare chatId?: CreationOptional<string>;
 
   declare static associations: {
     user: Association<ChatMemberModel, UserModel>;
@@ -32,7 +32,7 @@ ChatMemberModel.init(
       type: DataTypes.UUID,
     },
     userId: {
-      unique: true,
+      // unique: true,
       allowNull: false,
       type: DataTypes.UUID,
       references: { model: 'Users', key: 'id' },
